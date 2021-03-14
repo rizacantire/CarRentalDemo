@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -22,6 +23,7 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
+        [SecuredOperation("car.add,admin")]
         public IResult Add(Car car)
         {
 
@@ -36,8 +38,6 @@ namespace Business.Concrete
 
             return new Result(true, Messages.CarDeleted);
         }
-
-       
 
         public IDataResult<List<Car>> GetAll()
         {
