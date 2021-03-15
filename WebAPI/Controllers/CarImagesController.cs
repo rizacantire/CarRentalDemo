@@ -21,11 +21,15 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public List<CarImage> GetAll()
+        public IActionResult GetAll()
         {
             var result = _carImageService.GetAll();
+            if(result.Success)
+            {
+                return Ok(result);
+            }
 
-            return result.Data;
+            return BadRequest(result);
         }
 
         [HttpPost("add")]

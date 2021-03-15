@@ -15,6 +15,8 @@ using Business.BusinessAspects.Autofac;
 using Core.Aspects.Autofac.Caching;
 using System.Linq;
 using Core.Utilities.Business;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 
 namespace Business.Concrete
 {
@@ -26,7 +28,7 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
-        [SecuredOperation("car.add,admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
@@ -60,6 +62,7 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect]
         public IResult Update(Car car)
         {
             
@@ -104,6 +107,18 @@ namespace Business.Concrete
             }
 
             return new ErrorResult(Messages.CarNameAlreadyExists);
+        }
+        [TransactionScopeAspect]
+        public IResult AddTransactional(Car car)
+        {
+            Add(car);
+            if(car.DailyPrice<500)
+            {
+                throw new Exception("Fiyat 500 liranın altında olamaz");
+            }
+
+            Add(car);
+            return null;
         }
     }
 }

@@ -22,11 +22,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public List<Brand> GetAll()
+        public IActionResult GetAll()
         {
             var result = _brandService.GetAll();
-
-            return result.Data;
+            if(result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPost("add")]

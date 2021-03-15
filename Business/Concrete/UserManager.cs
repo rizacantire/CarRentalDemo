@@ -6,6 +6,7 @@ using Core.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -17,22 +18,16 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
+        
 
-        public IResult Add(User user)
-        {
-            _userDal.Add(user);
-            return new Result(true, Messages.Added);
-        }
         public List<OperationClaim> GetClaims(User user)
         {
             return _userDal.GetClaims(user);
         }
-
         public User GetByMail(string email)
         {
             return _userDal.Get(u => u.Email == email);
         }
-
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
@@ -49,12 +44,17 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_userDal.Get(u=>u.Id == userId), Messages.Listed);
         }
 
+        public IResult Add(User user)
+        {
+            _userDal.Add(user);
+            return new SuccessResult(Messages.UserRegistered);
+        }
+
         public IResult Update(User user)
         {
             _userDal.Update(user);
-            return new Result(true, Messages.Updated);
-        }
+            return new SuccessResult(Messages.UserUpdated);
 
-        
+        }
     }
 }

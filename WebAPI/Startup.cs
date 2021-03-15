@@ -34,11 +34,7 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200"));
-            });
+            services.AddCors();
 
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
